@@ -1,0 +1,370 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>BusBooking</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="{% static 'booking/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/jquery.timepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="">Bus<span>Booking</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="oi oi-menu"></span> Menu
+            </button>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active"><a href="{% url "home" %}" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link">About Us</a></li>
+                    <li class="nav-item"><a href="#working" class="nav-link">Our Working</a></li>
+                    <li class="nav-item"><a href="#offers" class="nav-link">Our Offers</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+            {% if login_user %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+                <ul class="navbar-nav ml-auto nav-flex-icons">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">{{login_user}}</a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default"
+                      aria-labelledby="navbarDropdownMenuLink-333">
+                      <a class="dropdown-item" href="{% url "orderview" %}">Your orders</a>
+                      <a class="dropdown-item" href="{% url "logout" %}">Logout</a>
+                    </div>
+                  </li>
+                </ul>
+            </div>
+            {% else %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+                <ul class="navbar-nav ml-auto nav-flex-icons"> 
+                <li class="nav-item"><a href="{% url "login" %}?next={{request.path}}" class="nav-link">Login</a></li>
+                <li class="nav-item"><a href="{% url "register" %}?next={{request.path}}" class="nav-link">Register</a></li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="hero-wrap home" id="home" style="background-image: url('{% static "booking/images/bg_3.jpg" %}');">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text justify-content-start align-items-center">
+                <div class="col-lg-6 col-md-6 ftco-animate d-flex align-items-end">
+                    <div class="text">
+                        <h1 class="mb-4">Now <span>It's easy for you</span> <span>rent a bus</span></h1>
+                    </div>
+                </div>
+                <div class="col-lg-2 col"></div>
+                <div class="col-lg-4 col-md-6 mt-0 mt-md-5 d-flex">
+                    <form action="{% url "booking" %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="request-form ftco-animate">
+                            <h2>Schedule your trip</h2>
+                            <div class="form-group">
+                                <label class="label">Pick-up location</label>
+                                <select id="choice1" class="selectpicker" name="choice1" data-width="310px" required>
+                                    <option>Select Source</option>
+                                    {% for key, value in chain_dict.items %}
+                                    <option value="{{key}}">{{key}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Drop-off location</label>
+                                <select id="choice2" class="selectpicker" name="choice2" data-width="310px" required>
+                                    <option value="">Select Destination</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Number of Passengers</label>
+                                <input id="passenger" name="passenger" type="text" class="form-control"
+                                placeholder="Enter number of passengers" style="font-weight: bold;" required>
+                            </div>
+                            <div class="d-flex">
+                                <div class="form-group mr-2">
+                                    <label class="label">Journey date</label>
+                                    <input class="form-control date required" id="date" name="date"
+                                    type="date" class="form-control" placeholder="Date" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="search_bus" type="submit" value="Search Buses" class="btn btn-primary py-3 px-4">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section ftco-no-pt ftco-no-pb about" id="about">
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align- -center"
+                style="background-image: url('{% static "booking/images/about.jpg" %}');">
+                </div>
+                <div class="col-md-6 wrap-about py-md-5 ftco-animate">
+                    <div class="heading-section mb-5 pl-md-5">
+                        <span class="subheading">About us</span>
+                        <h2 class="mb-4">Choose A Perfect Ride</h2>
+                        <p>Making the right travel arrangements is the genesis of any good holiday. Providing exceptional bus travel arrangements is the mantra that’s followed at redBus. India’s largest online bus ticketing platform has driven the country’s bus booking journey over the past 13 years through thousands of bus operators and routes.</p>
+                        <p>Striving to reach new heights when it comes to online bus booking in India, redBus has become the right tool to use to have a smooth bus ticket booking experience. Anybody can use the official website of redBus or the user-friendly app to book their bus tickets from anywhere in the country. From the comfort of your home or from or office or vehicle, people can make an online bus booking with ease.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="ftco-section services-section img working" id="working" style="background-image: url('{% static "booking/images/bg_2.jpg" %}');">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+                    <span class="subheading">Work flow</span>
+                    <h2 class="mb-3">How we work</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services services-2">
+                        <div class="media-body py-md-4 text-center">
+                            <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
+                            <h3>Pick Destination</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services services-2">
+                        <div class="media-body py-md-4 text-center">
+                            <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-select"></span></div>
+                            <h3>Select Term</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services services-2">
+                        <div class="media-body py-md-4 text-center">
+                            <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
+                            <h3>Choose A Bus</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services services-2">
+                        <div class="media-body py-md-4 text-center">
+                            <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-review"></span></div>
+                            <h3>Enjoy The Ride With Friends and Family</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+    <section class="ftco-section" id="offers">
+        <div class="container-fluid px-4">
+            <div class="row justify-content-center">
+          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+            <span class="subheading">What we offer</span>
+          </div>
+        </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="car-wrap ftco-animate">
+                        <div class="img d-flex align-items-end" style="background-image: url('{% static "booking/images/img-1.jpeg" %}');">
+                            <div class="price-wrap d-flex">
+                                <span class="rate">4000 &#8377;</span>
+                                <p class="from-day">
+                                    <span>Per Person</span>
+                                    <span>4 Day</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text p-4 text-center">
+                            <h2 class="mb-0"><a href="#">Manali Trip</a></h2>
+<!--                             <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-black btn-outline-black mr-1">Book now</a>
+                                <a href="#" class="btn btn-black btn-outline-black ml-1">Details</a></p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="car-wrap ftco-animate">
+                        <div class="img d-flex align-items-end" style="background-image: url('{% static "booking/images/img-2.jpeg" %}');">
+                            <div class="price-wrap d-flex">
+                                <span class="rate">10000 &#8377;</span>
+                                <p class="from-day">
+                                    <span>Per Person</span>
+                                    <span>4 Day</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text p-4 text-center">
+                            <h2 class="mb-0"><a href="#">Goa Trip</a></h2>
+                            <!-- <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-black btn-outline-black mr-1">Book now</a> <a href="#" class="btn btn-black btn-outline-black ml-1">Details</a></p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="car-wrap ftco-animate">
+                        <div class="img d-flex align-items-end" style="background-image: url('{% static "booking/images/img-3.jpeg" %}');">
+                            <div class="price-wrap d-flex">
+                                <span class="rate">6000 &#8377;</span>
+                                <p class="from-day">
+                                    <span>Per Person</span>
+                                    <span>4 Day</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text p-4 text-center">
+                            <h2 class="mb-0"><a href="#">Dharamshala</a></h2>
+                         <!--    <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-black btn-outline-black mr-1">Book now</a> <a href="#" class="btn btn-black btn-outline-black ml-1">Details</a></p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="car-wrap ftco-animate">
+                        <div class="img d-flex align-items-end" style="background-image: url('{% static "booking/images/img-4.jpeg" %}');">
+                            <div class="price-wrap d-flex">
+                                <span class="rate">6000 &#8377;</span>
+                                <p class="from-day">
+                                    <span>Per Person</span>
+                                    <span>4 Day</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text p-4 text-center">
+                            <h2 class="mb-0"><a href="#">Dera Beas</a></h2>
+                       <!--      <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-black btn-outline-black mr-1">Book now</a> <a href="#" class="btn btn-black btn-outline-black ml-1">Details</a></p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <section class="ftco-section services-section ftco-no-pt ftco-no-pb contact" id="contact">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+                    <span class="subheading"></span>
+                    <h2 class="mb-2">Contact us</h2>
+                </div>
+            </div>
+            <div class="row d-flex">
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services">
+                        <div class="media-body py-md-4">
+                            <div class="d-flex mb-3 align-items-center">
+                                <div class="icon"><span class="flaticon-customer-support"></span></div>
+                                <h3 class="heading mb-0 pl-3">24/7 Support</h3>
+                            </div>
+                            <p>Call us at 180012345</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services">
+                        <div class="media-body py-md-4">
+                            <div class="d-flex mb-3 align-items-center">
+                                <div class="icon"><span class="flaticon-route"></span></div>
+                                <h3 class="heading mb-0 pl-3">Lots of location</h3>
+                            </div>
+                            <p>Delhi NCR, Mumbai, Pune, Banglore</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services">
+                        <div class="media-body py-md-4">
+                            <div class="d-flex mb-3 align-items-center">
+                                <div class="icon"><span class="flaticon-online-booking"></span></div>
+                                <h3 class="heading mb-0 pl-3">Reservation</h3>
+                            </div>
+                            <p>Safe and Easy Reservation</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services">
+                        <div class="media-body py-md-4">
+                            <div class="d-flex mb-3 align-items-center">
+                                <div class="icon"><span class="flaticon-rent"></span></div>
+                                <h3 class="heading mb-0 pl-3">Rental Bus</h3>
+                            </div>
+                            <p>Rent Bus for Family Floater or Indivisual</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </section>
+    </section>
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
+    <script src="{% static 'booking/js/jquery.min.js' %}"></script>
+    <script src="{% static 'booking/js/jquery-migrate-3.0.1.min.js' %}"></script>
+    <script src="{% static 'booking/js/popper.min.js' %}"></script>
+    <script src="{% static 'booking/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'booking/js/jquery.easing.1.3.js' %}"></script>
+    <script src="{% static 'booking/js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'booking/js/jquery.stellar.min.js' %}"></script>
+    <script src="{% static 'booking/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'booking/js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'booking/js/aos.js' %}"></script>
+    <script src="{% static 'booking/js/jquery.animateNumber.min.js' %}"></script>
+    <script src="{% static 'booking/js/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'booking/js/jquery.timepicker.min.js' %}"></script>
+    <script src="{% static 'booking/js/scrollax.min.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="{% static 'booking/js/google-map.js' %}"></script>
+    <script src="{% static 'booking/js/main.js' %}"></script>
+    <!-- Latest compiled and minified selectpicker -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script>
+    $("#choice1").on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
+        var category_type = $('#choice1').find('option').eq(clickedIndex).text();
+        var test = {{chain_dict | safe}};
+        var item;
+        if (test.hasOwnProperty(category_type)) {
+            item = test[category_type];
+        }
+        $("#choice2").empty().selectpicker('refresh');
+        $.each(item, function(index, value) {
+            $('#choice2').append("<option>" + value + "</option>").selectpicker('refresh');
+        });
+    });
+
+    // $("#search_bus").click(function() {
+    //     var choice1 = $('#choice1').val();
+    //     var choice2 = $('#choice2').val();
+    //     var passenger = $('#passenger').val();
+    //     var date = $('#date').val();
+    //     if (choice1 == "" || choice2 == "" || passenger == "" || date == "") {
+    //         alert("Please Enter Value");
+    //         return false;
+    //     } 
+    //     else {
+    //         return true
+    //     }
+    // });
+    </script>
+    </script>
+</body>
+
+</html>

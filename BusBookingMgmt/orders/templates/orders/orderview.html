@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>BusBooking</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+</head>
+
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color">
+  <a class="navbar-brand" href="{% url "home" %}">BusBooking</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+    aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+    <ul class="navbar-nav ml-auto nav-flex-icons">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-user"> {{context.login_user}} </i></a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-default"
+          aria-labelledby="navbarDropdownMenuLink-333">
+          <a class="dropdown-item" href="{% url "logout" %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+ <body>	
+ 	<div class="row" style="margin: 10px">
+        <table class="table table-striped">
+            <tr>
+                <th style="font-size: 15px;">Vehicle Name</th>
+                <th style="font-size: 15px;">Source</th>
+                <th style="font-size: 15px;">Destination</th>
+                <th style="font-size: 15px;">Departure Location</th>
+                <th style="font-size: 15px;">Arrival Location</th>
+                <th style="font-size: 15px;">Departure Time</th>
+                <th style="font-size: 15px;">Arrival Time</th>
+                <th style="font-size: 15px;">Journey Date</th>
+                <th style="font-size: 15px;">Total Amount</th>
+                <th style="font-size: 15px;">AC/Non AC</th>
+                <th style="font-size: 15px;">Cancel your journey</th>
+            </tr>
+ 		{% for object in context.user_orders %}
+ 		<form method="post" action="{% url "orderview" %}">
+        	{% csrf_token %}
+ 			{% if object.query.attrs.one_side %}
+            <tr>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.vehicle_name }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.source }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.destination }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.departure_location }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.arival_location }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.departure_time }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.desstination_time }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.journey_date }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.total_price }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.one_side.ac }}</td>
+                <input type="hidden" name="onward_side" value={{object.id}}>
+                <td><button type="submit" id="onward_cancel" class="btn btn-danger">Cancel</button></td>
+            </tr>
+    		{% endif %}
+    	</form>
+    	<form method="post" action="{% url "orderview" %}">
+        	{% csrf_token %}
+    		{% if object.query.attrs.return_query %}
+            <tr>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.vehicle_name }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.source }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.destination }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.departure_location }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.arival_location }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.departure_time }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.desstination_time }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.journey_date }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.total_price }}</td>
+                <td style="font-size: 15px;">{{ object.query.attrs.return_query.ac }}</td>
+                <input type="hidden" name="return_side" value={{object.id}}>
+                <td><button type="submit" id="return_cancel" class="btn btn-danger">Cencel</button></td>
+            </tr>
+    		{% endif %}
+    	</form>
+    	{% endfor %}
+        </table>
+    </div>
+ </body>
+
+ </html>

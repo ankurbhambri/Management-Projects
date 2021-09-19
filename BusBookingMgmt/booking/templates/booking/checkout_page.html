@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>BusBooking</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    
+<style>
+  body {
+    font-family: Arial;
+    font-size: 17px;
+    padding: 8px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .row {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+    margin: 0 -16px;
+  }
+
+  .col-25 {
+    -ms-flex: 25%; /* IE10 */
+    flex: 25%;
+  }
+
+  .col-50 {
+    -ms-flex: 50%; /* IE10 */
+    flex: 50%;
+  }
+
+  .col-75 {
+    -ms-flex: 75%; /* IE10 */
+    flex: 75%;
+  }
+
+  .col-25,
+  .col-50,
+  .col-75 {
+    padding: 0 16px;
+  }
+
+  .container {
+    background-color: #f2f2f2;
+    padding: 5px 20px 15px 20px;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+  }
+
+  input[type=text] {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  label {
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .icon-container {
+    margin-bottom: 20px;
+    padding: 7px 0;
+    font-size: 24px;
+  }
+
+  .btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    width: 100%;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 17px;
+  }
+
+  .btn:hover {
+    background-color: #45a049;
+  }
+
+  a {
+    color: #2196F3;
+  }
+
+  hr {
+    border: 1px solid lightgrey;
+  }
+
+  span.price {
+    float: right;
+    color: grey;
+  }
+  @media (max-width: 800px) {
+    .row {
+      flex-direction: column-reverse;
+    }
+    .col-25 {
+      margin-bottom: 20px;
+    }
+  }
+</style>
+</head>
+
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color">
+  <a class="navbar-brand" href="{% url "home" %}">BusBooking</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
+    aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+    <ul class="navbar-nav ml-auto nav-flex-icons">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-user"> {{context.login_user}} </i></a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-default"
+          aria-labelledby="navbarDropdownMenuLink-333">
+          <a class="dropdown-item" href="{% url "logout" %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<body>
+    {% if context.one_side %}
+    <div class="row" style="margin: 10px">
+        <h6>Onward Schedule</h6>
+        <table class="table table-striped">
+            <tr>
+                <th style="font-size: 15px;">Source</th>
+                <th style="font-size: 15px;">Destination</th>
+                <th style="font-size: 15px;">Departure Location</th>
+                <th style="font-size: 15px;">Arrival Location</th>
+                <th style="font-size: 15px;">Departure Time</th>
+                <th style="font-size: 15px;">Arrival Time</th>
+                <th style="font-size: 15px;">Journey Date</th>
+                <th style="font-size: 15px;">Total Amount</th>
+            </tr>
+            <tr>
+                <td style="font-size: 15px;">{{ context.one_side.source }}</td>
+                <td style="font-size: 15px;">{{ context.one_side.destination }}</td>
+                <td style="font-size: 15px;">{{ context.one_side.departure_location }}</td>
+                <td style="font-size: 15px;">{{ context.one_side.arival_location }}</td>
+                <td style="font-size: 15px;">{{ context.one_side.departure_time }}</td>
+                <td style="font-size: 15px;">{{ context.one_side.desstination_time }}</td>
+                <td style="font-size: 15px;">{{ context.one_side.journey_date }}</td>
+                <td style="font-size: 15px;">{{ context.one_side.total_price }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+    {% if context.return_query %}
+    <div style="margin: 10px">
+        <h6>Return Schedule</h6>
+        <table class="table table-striped">
+            <tr>
+                <th style="font-size: 15px;">Source</th>
+                <th style="font-size: 15px;">Destination</th>
+                <th style="font-size: 15px;">Departure Location</th>
+                <th style="font-size: 15px;">Arrival Location</th>
+                <th style="font-size: 15px;">Departure Time</th>
+                <th style="font-size: 15px;">Arrival Time</th>
+                <th style="font-size: 15px;">Journey Date</th>
+                <th style="font-size: 15px;">Total Amount</th>
+            </tr>
+            <tr>
+                <td style="font-size: 15px;">{{ context.return_query.source }}</td>
+                <td style="font-size: 15px;">{{ context.return_query.destination }}</td>
+                <td style="font-size: 15px;">{{ context.return_query.departure_location }}</td>
+                <td style="font-size: 15px;">{{ context.return_query.arival_location }}</td>
+                <td style="font-size: 15px;">{{ context.return_query.departure_time }}</td>
+                <td style="font-size: 15px;">{{ context.return_query.desstination_time }}</td>
+                <td style="font-size: 15px;">{{ context.return_query.journey_date }}</td>
+                <td style="font-size: 15px;">{{ context.return_query.total_price }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+    <div style="margin: 10px;">
+        <hr>
+        <p class="text-center">Total Payble Amount of Trip <b> {{ context.amt }}</b>
+            <i class="fa fa-inr" aria-hidden="true"></i></p>
+        <hr>
+    </div>
+    <div class="row">
+        <div class="col-75">
+            <div class="container">
+                <form method="post" action="{% url "success" %}">
+                    {% csrf_token %}
+                    <div class="col-50">
+                        <h3>Payment</h3>
+                        <label for="fname">Accepted Cards</label>
+                        <div class="icon-container">
+                            <!-- <img src="{% static 'booking/images/cardimg.png' %}" width="150" height="60"> -->
+                            <i class="fa fa-cc-visa" style="color:navy;"></i>
+                            <i class="fa fa-cc-amex" style="color:blue;"></i>
+                            <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                            <i class="fa fa-cc-discover" style="color:orange;"></i>
+                        </div>
+                        <input type="hidden" name="query_id" value={{context.query_id}}>
+                        <label for="cname">Name on Card</label>
+                        <input type="text" id="cname" name="cardname" placeholder="ex - John More Doe" required>
+                        <label for="ccnum">Credit card number</label>
+                        <input type="text" id="ccnum" name="cardnumber" placeholder="ex - 1111-2222-3333-4444" required>
+                        <label for="expmonth">Exp Month</label>
+                        <input type="text" id="expmonth" name="expmonth" placeholder="ex - September" required>
+                        <div class="row">
+                            <div class="col-50">
+                                <label for="expyear">Exp Year</label>
+                                <input type="text" id="expyear" name="expyear" placeholder="ex - 2018" required>
+                            </div>
+                            <div class="col-50">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" name="cvv" placeholder="ex - 123" required>
+                            </div>
+                        </div>
+                        <label for="expmonth">Total Amount</label>
+                        <input type="text" name="Total Amount" placeholder="{{ context.amt }}" readonly>
+                    </div>
+                    <input type="submit" value="Continue to checkout" class="btn">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+</html>
