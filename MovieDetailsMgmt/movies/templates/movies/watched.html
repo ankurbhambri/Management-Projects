@@ -1,0 +1,38 @@
+{% extends 'movies/base.html' %}
+
+{% block css %}
+
+  table {
+      text-align: center;
+      vertical-align: middle;
+  }
+form {
+    display: inline-block; 
+}
+{% endblock %}
+
+{% block body %}
+  <div class="cotainer" style="margin: 20px;">
+    <h4 style="text-align: center;">Your Whishlist</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Movie Tittle</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        {% for value in context.movie_data %}
+          <td><a href="{% url 'movie' value.id  %}">{{ value.tittle }}</a></td>
+          <form method="post" action="{% url "watched" %}">
+            {% csrf_token %}
+            <input type="hidden" name="watched" value={{value.id}}>
+            <td><button type="submit" class="btn btn-warning">Remove</button></td>
+          </form>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

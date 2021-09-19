@@ -1,0 +1,49 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+
+{% block css %}
+
+
+{'runtime': '2h 55min', 'writers': '    ', 'director': 'Francis Ford Coppola ', 'release_data': '24 March 1972 (USA)', 'summary_text': 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.'}
+{% endblock %}
+
+{% block body %}
+    <div class="card text-center">
+      <img src="{{context.movie_data.image_url}}" width="400" style="margin-left: 470px;" />
+      <div class="card-body">
+        <h5 class="card-title">{{context.movie_data.tittle}} &nbsp ({{context.movie_data.extra_feild.release_data}})</h5>
+        <p class="card-text"><strong>Runtime:</strong> {{context.movie_data.extra_feild.runtime}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Director:</strong> {{context.movie_data.extra_feild.director}}</li>
+        <li class="list-group-item"><strong>Writers:</strong> {{context.movie_data.extra_feild.writers}}</li>
+        <li class="list-group-item"><strong>Summary:</strong> {{context.movie_data.extra_feild.summary_text}}</li>
+      </ul>
+      <div class="card-body">
+        <div class="row">
+          <div class="col" style="text-align: right;">
+            {% if context.whishlist %}
+            <button type="submit" class="btn btn-success">In WhishList</button>
+            {% else %}
+            <form method="post" action="{% url "movie" context.movie_data.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="whishlist" value={{context.movie_data.id}}>
+              <button type="submit" class="btn btn-primary">Add to WhishList</button>
+            </form>
+            {% endif %}
+          </div>
+          <div class="col" style="text-align: left;">
+            {% if context.watched %}
+            <button type="submit" class="btn btn-success">Watched</button>
+            {% else %}
+            <form method="post" action="{% url "movie" context.movie_data.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="watched" value={{context.movie_data.id}}>
+              <button type="submit" class="btn btn-primary">Watch</button>
+            </form>            
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

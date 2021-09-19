@@ -1,0 +1,42 @@
+{% extends 'movies/base.html' %}
+
+{% block css %}
+
+  table {
+      text-align: center;
+      vertical-align: middle;
+  }
+form {
+    display: inline-block; 
+}
+{% endblock %}
+
+{% block body %}
+  <div class="cotainer" style="margin: 20px;">
+      <form method="post" action="{% url "home" %}" class="form-inline" style="float: right; margin-bottom: 10px;">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="movie_search"
+          placeholder="Search Movie">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+    <h4 style="text-align: center;">Top Movies Chart</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Movie Tittle</th>
+          <th>Year</th>
+          <th>Ratings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        {% for value in context.movies_data %}
+          <td><a href="{% url 'movie' value.id  %}">{{ value.tittle }}</a></td>
+          <td>{{ value.year }}</td>
+          <td>{{ value.rating }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

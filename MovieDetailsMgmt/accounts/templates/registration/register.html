@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    <style type="text/css">
+        #id_username, #id_password1, #id_password2, #id_email, #id_first_name, #id_last_name{
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" style="margin-left:377px; margin-top:117px;">
+        <div class="row">
+            <div class="form_bg">
+                <div class="col-sm-6" style="text-align:justify;">
+                    <div class="jumbotron">
+                    <h2 class="text-center">Register</h2>
+                    <hr>
+                    <form method="post" action="{% url "register" %}" enctype="multipart/form-data" autocomplete="off">
+                        {% csrf_token %}
+                        <input type="hidden" id="nextUrl" name="nexturl" value={{context.redirect_url}}>
+                        <div class="form-group pass1">
+                            <label>First Name : </label>
+                            {{ context.form.first_name }}
+                        </div>
+                        <div class="form-group pass1">
+                            <label>Last Name : </label>
+                            {{ context.form.last_name }}
+                        </div>
+                        <div class="form-group username">
+                            <label>Username : </label>
+                             {{ context.form.username }}
+                             <h6>username must be unique</h6>
+                        </div>
+                        <div class="form-group username">
+                            <label>Email : </label>
+                             {{ context.form.email }}
+                        </div>
+                        <div class="form-group pass1">
+                            <label>Password : </label>
+                            {{ context.form.password1 }}
+                        </div>
+                        <div class="form-group pass2">
+                            <label>Conform Password : </label>
+                            {{ context.form.password2 }}
+                        </div>
+                        <div class="form-group">
+                            <strong>Already Registerd ? <a href="{% url "login" %}?next={{context.redirect_url}}">login</a></strong>
+                        </div>
+                        {% if context.error %}
+                            <h6 style="font-style: italic; background-color: yellow;">{{context.error}}</h6>
+                        {% endif %}
+                        <div class="form-group">
+                            <input id="register" type="submit" value="Register">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+
+    $("#register").click(function() {
+        var username = $('#id_username').val();
+        var pass1 = $('#id_password1').val();
+        var pass2 = $('#id_password2').val();
+        // if (username.search(/[A-Z]/) < 0){
+        //     Swal.fire("First chracter of username must be capital");
+        //     return false;
+        // }
+        if (pass1.length < 8) {
+            Swal.fire("Password Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.");
+            return false;
+        }
+        else if (pass1.search(/[a-z]/i) < 0) {
+            Swal.fire("Your password must contain at least one letter.");
+            return false;
+        }
+        if (pass1.search(/[0-9]/) < 0) {
+            Swal.fire("Your password must contain at least one digit."); 
+            return false;
+        }
+        else if (pass2 != pass1){
+            Swal.fire("Password not matching with confirm password")
+            return false;
+        }
+        else {
+            return true
+        }
+    });
+</script>
+</html>

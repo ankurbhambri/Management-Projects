@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- <title>{% block tittle %}{% endblock %}</title> -->
+    <title>Trainman</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+      {% block css %}{% endblock %}
+    </style>
+
+</head>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="{% url "home" %}">Trainman</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333" aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+        {% if context.login_user %}
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-user" aria-hidden="true"> {{ context.login_user.username }} </i></a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
+                    <a class="dropdown-item" href="{% url "whistlist" %}">WishList</a>
+                    <a class="dropdown-item" href="{% url "watched" %}">Watched</a>
+                    <a class="dropdown-item" href="{% url "logout" %}">Logout</a>
+                </div>
+            </li>
+        </ul>
+        {% else %}
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+            <li class="nav-item"><a href="{% url "login" %}?next={{request.path}}" class="nav-link">Login</a></li>
+            <li class="nav-item"><a href="{% url "register" %}?next={{request.path}}" class="nav-link">Register</a></li>
+        </ul>
+        {% endif %}
+    </div>
+</nav>
+
+<body>{% block body %}{% endblock %}</body>
+
+<script type="text/javascript">{% block script %}{% endblock %}</script>
+
+</html>
