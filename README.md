@@ -1,1 +1,1 @@
-# Open Source Ready to use Managemnet Projects.
+# Django Based Managemnet Projects.
